@@ -205,17 +205,4 @@ docker run --rm -p 8501:8501 -v "$PWD/assets:/app/assets" backpack-app
 
 ---
 
-If you want, I can also spit out a `requirements.txt` tailored to the exact versions you’re running now, or add a `docker-compose.yml` for one-command up/down.
-
 [1]: https://docs.streamlit.io/deploy/tutorials/docker?utm_source=chatgpt.com "Deploy Streamlit using Docker - Streamlit Docs"
-
-
- -m venv streamlit_yolo_venv
-
-source new_venv/bin/activate
-
-pip3 install -r requirements.txt    
- 
-
-streamlit run app.py
-
