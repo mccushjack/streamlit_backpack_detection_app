@@ -1,0 +1,44 @@
+# ---- Base image ----
+FROM python:3.11-slim
+
+# Prevent Python buffering & keep pip lean
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=8501
+
+# System deps for OpenCV + FFmpeg (H.264 playback/convert), and basic tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Workdir
+WORKDIR /app
+
+# (Optional) install build tools if you add libs needing compilation
+# RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
+
+# Copy app code & assets
+COPY . /app
+
+# Install Python deps
+# You can switch to `COPY requirements.txt . && pip install -r requirements.txt`
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir \
+      streamlit ultralytics \
+      torch torchvision torchaudio \
+      opencv-python-headless pillow numpy
+
+# Expose Streamlit's default port
+EXPOSE 8501
+
+# Healthcheck (optional)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
+  CMD curl -f http://localhost:${PORT}/_stcore/health || exit 1
+
+# Run the app
+CMD ["bash", "-lc", "streamlit run app.py --server.address 0.0.0.0 --server.port ${PORT}"]

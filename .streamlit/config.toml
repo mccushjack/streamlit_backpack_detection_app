@@ -1,0 +1,11 @@
+[theme]
+base = "dark"
+primaryColor = "#f36f26"         # <-- replace with Tavant accent from the logo file
+backgroundColor = "#111111"
+secondaryBackgroundColor = "#222222"
+textColor = "#FFFFFF" 
+
+
+[server]
+port = 8501
+headless = true
